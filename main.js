@@ -26,7 +26,10 @@ window.addEventListener('load', function(e){
                 resolve();
             }
         })
-    });})
+    });}).catch(function (e) {
+        console.log('error');
+        
+    });
   
 
     
