@@ -17,16 +17,29 @@ window.addEventListener('load', function(e){
             if (resolve.error){
                 reject(new Error(response.error.error_msg));
             } else{
-                console.log(response);
-                console.log(response.response[0].first_name);
-                console.log(response.response[0].last_name);
+                
                 let headerInfo = document.querySelector('.headerInfo');
-                console.log(headerInfo);
                 headerInfo.textContent = `Музыка на странице ${response.response[0].first_name} ${response.response[0].last_name}`;
                 resolve();
             }
         })
-    });}).catch(function (e) {
+    });}).then(function(){ 
+        return new Promise(function(resolve, reject) {
+            VK.api('audio.get', {v:"5.73"}, function (response) {
+                console.log(response);
+                if(response.error){
+                    reject(new Error(response.error.error_msg));
+                } else {
+                    let source = playerItemTemplate.innerHTML;
+                    let templateFn = Handlebars.compile(source);
+                    let template = templateFn({list: response.response});
+
+                    result.innerHTML = template;
+                };
+                
+            });
+        });
+    }).catch(function (e) {
         console.log('error');
         
     });
