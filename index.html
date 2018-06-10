@@ -13,7 +13,26 @@
     <title>API VK player</title>
 </head>
 <body>
+    <div class="container">   
     <h1 class="headerInfo"></h1>
+    <div class="result"></div>
+    </div> 
+    
+    <script type="text/x-handlebars-template" id="playerItemTemplate">
+        <ul id="audioList" class="list-group">
+           {{#each list}}
+               <li class="list-group-item">
+                   <div class="row">
+                       <div class="col-xs-10">
+                           <span class="glyphicon glyphicon-play" data-role="playback" data-src="{{url}}"></span>
+                           <span class="title">{{artist}} - {{title}}</span>
+                       </div>
+                       <div class="col-xs-2 text-right">{{formatTime duration}}</div>
+                   </div>
+               </li>
+           {{/each }}
+        </ul>
+    </script>
 </body>
 <script src="main.js"></script>
 </html>    
