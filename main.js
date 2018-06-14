@@ -7,7 +7,10 @@ window.addEventListener('load', function(e){
         
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
-    })
+    });
+    
+    let globalPlayer = document.createElement('audio');
+    let playingItem;
     
     new Promise(function(resolve,reject){
         VK.Auth.login(function(response){
@@ -49,6 +52,45 @@ window.addEventListener('load', function(e){
                 
             });
         });
+    }).then(function(){
+        function onPlay(){
+            playingItem.querySelector('[data-role="playback"]').className = 'glyphicon glyphicon-pause';
+        };
+        
+        function onPause(){
+            playingItem.querySelector('[data-role="playback"]').className = 'glyphicon glyphicon-play';
+        };
+        
+        
+        globalPlayer.addEventListener('play', onPlay);
+        globalPlayer.addEventListener('pause', onPause);
+        
+        result.addEventListener('click', function(e){
+            if(e.target.getAttribute('data-role') === 'playback'){
+                let currentTarget = e.target.closest('li');
+                
+                if(currentTarget === playingItem){
+                    if(globalPlayer.paused){
+                        globalPlayer.play();
+                    } else {
+                        globalPlayer.pause();
+                    }
+                } else {
+                    if(!globalPlayer.paused){
+                       onPause();
+                    };
+                playingItem = currentTarget;
+                    
+                globalPlayer.src = e.target.getAttribute('data-src');
+                globalPlayer.play;
+                
+                    
+                }
+            };
+            
+            
+        });
+        
     }).catch(function (e) {
         console.log('error');
         
