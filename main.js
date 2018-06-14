@@ -53,6 +53,14 @@ window.addEventListener('load', function(e){
             });
         });
     }).then(function(){
+        function onProgress(e){
+            let progressBar = playingItem.querySelector('[data-role=progressbar]');
+            let duration = e.target.duration;
+            let currentTime = e.target.currentTime;
+            let progress = parseInt(100 / duration * currentTime);
+            progressBar.style.width = progress + '%';
+        }
+        
         function onPlay(){
             playingItem.querySelector('[data-role="playback"]').className = 'glyphicon glyphicon-pause';
         };
@@ -61,9 +69,24 @@ window.addEventListener('load', function(e){
             playingItem.querySelector('[data-role="playback"]').className = 'glyphicon glyphicon-play';
         };
         
+        function toSone(to){
+            if(playingItem){
+                let nextPlayer = to === 'next' ? playingItem.nextElementSibling : playingItem.previousElementSibling;
+                if(nextPlayer){
+                  nextPlayer.querySelector('[data-role=playback]').dispatchEvent(new CustomEvent('click'));  
+                };
+            };
+        };
+        
+        function onEnd(){
+            toSone('next');
+        };
+        
         
         globalPlayer.addEventListener('play', onPlay);
         globalPlayer.addEventListener('pause', onPause);
+        globalPlayer.addEventListener('timeupdate', onProgress);
+        globalPlayer.addEventListener('ended', onEnd);
         
         result.addEventListener('click', function(e){
             if(e.target.getAttribute('data-role') === 'playback'){
@@ -88,7 +111,7 @@ window.addEventListener('load', function(e){
                 }
             };
             
-            
+            //возможно данный участок надо переместить перед формированием странице result
         });
         
     }).catch(function (e) {
