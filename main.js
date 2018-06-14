@@ -1,4 +1,14 @@
 window.addEventListener('load', function(e){
+    
+// function for sec to min:sec formate   
+    Handlebars.registerHelper('formatTime', function(time){
+        let minutes = parseInt(time / 60);
+        let seconds = time - minutes * 60;
+        
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+    })
+    
     new Promise(function(resolve,reject){
         VK.Auth.login(function(response){
             if (response.session) {
